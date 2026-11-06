@@ -24,12 +24,20 @@ pulled from its repository instead of Packagist:
 ```json
 {
   "dependencies": {
-    "@lingner/node-health": "github:lingnerweb/lin-node-health#v0.1.0"
+    "@lingner/node-health": "git+ssh://git@github.com/lingnerweb/lin-node-health.git#v0.1.0"
   }
 }
 ```
 
-`dist/` is committed for that reason: nothing builds on the installing side.
+Not the `github:` shorthand: bun resolves it over the GitHub tarball API, which
+answers 404 for a private repository unless a token is configured. `git+ssh`
+clones with the SSH key that is there anyway, so the build host needs a deploy
+key with read access to this repository.
+
+`dist/` is committed because nothing builds on the installing side. A git
+dependency also ships the whole repository rather than what `files` in
+package.json lists, so `src/` and the tests land in node_modules as well;
+`exports` still decides what can be imported.
 
 ## Use it in a Next.js app
 
