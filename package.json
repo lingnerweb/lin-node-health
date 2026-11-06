@@ -1,0 +1,53 @@
+{
+	"name": "@lingner/node-health",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Bearer-protected health endpoint for Node projects, implementing the lin-grafana-monitoring contract",
+	"license": "UNLICENSED",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lingnerweb/lin-node-health.git"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"engines": {
+		"node": ">=22"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"import": "./dist/index.mjs"
+		},
+		"./next": {
+			"types": "./dist/next/index.d.mts",
+			"import": "./dist/next/index.mjs"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown",
+		"dev": "tsdown --watch",
+		"check-types": "tsc --noEmit",
+		"check": "biome check .",
+		"format": "biome check --write .",
+		"test": "node --test test/*.test.ts"
+	},
+	"peerDependencies": {
+		"next": ">=15.0.0"
+	},
+	"peerDependenciesMeta": {
+		"next": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.15",
+		"@types/node": "^24.19.1",
+		"tsdown": "^0.16.1",
+		"typescript": "^5.9.3"
+	}
+}

@@ -1,0 +1,7 @@
+node_modules
+*.tgz
+.DS_Store
+tsconfig.tsbuildinfo
+
+# dist is committed: the package is consumed as a git dependency over tags,
+# where no build step runs on the installing side.
