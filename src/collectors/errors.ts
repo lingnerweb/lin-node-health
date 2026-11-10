@@ -11,9 +11,16 @@ export interface ErrorEvent {
 	 * means one element failed while the page rendered.
 	 */
 	readonly errorPage?: "page" | "content";
-	/** Which log the entry belongs to, default "app". */
+	/**
+	 * Which log the entry belongs to, default "app".
+	 *
+	 * Both this and level have to come from a fixed set of names. Every distinct
+	 * combination becomes its own series and is held for 24 hours, so request
+	 * data here (a path, a user agent, an error message) grows the window without
+	 * a bound and explodes the cardinality on the Prometheus side.
+	 */
 	readonly log?: string;
-	/** Severity, default "error". */
+	/** Severity, default "error". A fixed set of values, see the note on log. */
 	readonly level?: string;
 }
 

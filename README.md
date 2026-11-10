@@ -1,12 +1,13 @@
 # @lingner/node-health
 
-Health endpoint for Node projects, scraped by
-[lin-grafana-monitoring](https://github.com/lingnerweb/lin-grafana-monitoring).
-It implements version 2 of that repository's `CONTRACT.md`, which is normative:
-when this package and the contract disagree, the contract is right.
+Health endpoint for Node projects, scraped by the Lingner monitoring stack
+(`lin-grafana-monitoring`). It implements version 2 of that repository's
+`CONTRACT.md`, which is normative: when this package and the contract disagree,
+the contract is right. That repository is internal, so the contract is not
+public; the shapes it prescribes are described under
+[What it reports](#what-it-reports).
 
-The TYPO3 side of the same contract is
-[lin-typo3-health](https://github.com/lingnerweb/lin-typo3-health).
+The TYPO3 side of the same contract is `lin-typo3-health`.
 
 ```
 @lingner/node-health            core: collector registry, warnings, Prometheus
@@ -18,21 +19,29 @@ A `payload` entry point with Postgres and job metrics follows in a later phase.
 
 ## Install
 
-The package is private and installed from a git tag, like the TYPO3 extension is
+Installed from a git tag, not from a registry, like the TYPO3 extension is
 pulled from its repository instead of Packagist:
 
 ```json
 {
   "dependencies": {
-    "@lingner/node-health": "git+ssh://git@github.com/lingnerweb/lin-node-health.git#0.1.0"
+    "@lingner/node-health": "github:lingnerweb/lin-node-health#0.1.0"
   }
 }
 ```
 
-Not the `github:` shorthand: bun resolves it over the GitHub tarball API, which
-answers 404 for a private repository unless a token is configured. `git+ssh`
-clones with the SSH key that is there anyway, so the build host needs a deploy
-key with read access to this repository.
+`"private": true` in package.json means this package is never published to npm.
+It does not restrict installing from git.
+
+The SSH form resolves the same tag and is what the existing consumers use:
+
+```
+git+ssh://git@github.com/lingnerweb/lin-node-health.git#0.1.0
+```
+
+It clones over SSH rather than the GitHub tarball API, which is the only way to
+reach a private repository and needs a deploy key with read access. For a public
+one both forms work, and the shorthand needs no key at all.
 
 `dist/` is committed because nothing builds on the installing side. A git
 dependency also ships the whole repository rather than what `files` in
@@ -165,7 +174,7 @@ check that `files` in package.json is complete:
 bun run build
 bun pm pack --destination /tmp
 
-cd ../lngnr/apps/lingner-web
+cd ../path/to/the-app
 rm -rf node_modules/@lingner/node-health
 mkdir -p node_modules/@lingner/node-health
 tar -xzf /tmp/lingner-node-health-0.1.0.tgz \
