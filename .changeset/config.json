@@ -1,0 +1,17 @@
+{
+	"$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
+	"changelog": "@changesets/cli/changelog",
+	"commit": false,
+	"fixed": [],
+	"linked": [],
+	"access": "restricted",
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": [],
+	"//privatePackages": "The package is private and never published to npm. Without version: true, Changesets would skip it entirely and bump nothing.",
+	"privatePackages": {
+		"version": true,
+		"tag": false
+	},
+	"//tag": "tag: false on purpose. Changesets tags a single-package repository as v<version>, but every Lingner repository tags plain semver without the v prefix, and consumers pin that tag in their dependency URL. scripts/release.ts writes the tag instead."
+}

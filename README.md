@@ -24,7 +24,7 @@ pulled from its repository instead of Packagist:
 ```json
 {
   "dependencies": {
-    "@lingner/node-health": "git+ssh://git@github.com/lingnerweb/lin-node-health.git#v0.1.0"
+    "@lingner/node-health": "git+ssh://git@github.com/lingnerweb/lin-node-health.git#0.1.0"
   }
 }
 ```
@@ -174,3 +174,42 @@ tar -xzf /tmp/lingner-node-health-0.1.0.tgz \
 
 The next `bun install` overwrites that directory with whatever package.json
 names, so this is a development loop, not a setup step.
+
+## Releasing
+
+Versions are managed with [Changesets](https://github.com/changesets/changesets),
+as in `linos` and `lngnr-claude-plugins`. The package is never published to npm:
+the git tag is the artifact, and consumers pin it in their dependency URL.
+
+While working, record anything a consumer will notice:
+
+```bash
+bun run changeset    # patch / minor / major plus one sentence
+```
+
+Commit that file with the change. Tooling, CI and internal refactors do not need
+one.
+
+To release:
+
+```bash
+bun run release
+```
+
+The script refuses a dirty tree or a branch other than `main`, runs the checks,
+then bumps the version, writes `CHANGELOG.md`, rebuilds, commits and tags. It
+prints the push command rather than pushing.
+
+Two things make the order matter, both specific to this package:
+
+- `dist/` is committed, because nothing builds on the installing side. The tag has
+  to point at a tree whose `dist/` matches the new version.
+- `tsdown.config.ts` bakes the version from package.json into the bundle, where it
+  becomes the `version` label on `lin_health_info`. Tagging without rebuilding
+  reports the previous version to Grafana. Nothing fails, the number is just wrong.
+
+Tags are plain semver without a `v` prefix (`0.2.0`, not `v0.2.0`), matching
+`lin-typo3-health` and the other Lingner repositories.
+
+A release does not reach anyone by itself. The consuming projects pin an exact
+tag, so someone has to raise it there; a git dependency has no semver range.

@@ -34,7 +34,9 @@
 		"check-types": "tsc --noEmit",
 		"check": "biome check .",
 		"format": "biome check --write .",
-		"test": "node --test test/*.test.ts"
+		"test": "node --test test/*.test.ts",
+		"changeset": "changeset",
+		"release": "bun run scripts/release.ts"
 	},
 	"peerDependencies": {
 		"next": ">=15.0.0"
@@ -46,6 +48,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.15",
+		"@changesets/cli": "^3.0.3",
 		"@types/node": "^24.19.1",
 		"tsdown": "^0.16.1",
 		"typescript": "^5.9.3"
